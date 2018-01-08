@@ -146,11 +146,11 @@ namespace AGL.Test.Solution.Tests
 
             Assert.IsTrue(males.Match(left => throw new System.Exception($"Error: {left}"),
                                       right => right.SequenceEqual(testMales)),
-                                      "Doesn't not match test result given in question");
+                                      "Alternative solution doesn't match solution for males");
 
             Assert.IsTrue(females.Match(left => throw new System.Exception($"Error: {left}"),
                                         right => right.SequenceEqual(testFemales)),
-                                        "Doesn't not match test result given in question");
+                                        "Alternative solution doesn't match solution for females");
         }
     }
 }
