@@ -159,9 +159,7 @@ namespace AGL.Test.Solution.Tests
         {
             // 
             // Generate 100 random generated people
-            //
-            var people = PersonGenerator.Generate(3, 30).Generate(100);
-
+            //           
             var r = new PetRespository(() => throw new Exception("Failed in getting data"));
             
             var males = Task.Run(async () => await r.GetPetNamesByGenderAsync(Domain.Gender.Male))
