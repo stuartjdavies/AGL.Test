@@ -5,7 +5,7 @@ namespace AGL.Test.Solution.XUnit.Tests
 {
     public partial class PetRepositoryTests
     {
-        public class PersonGenerator
+        public class PetOwnerGenerator
         {
             public static Faker<Domain.Person> Generate(int minPets, int maxPets)
             {

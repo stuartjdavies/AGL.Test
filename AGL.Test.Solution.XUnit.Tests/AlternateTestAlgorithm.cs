@@ -19,7 +19,7 @@ namespace AGL.Test.Solution.XUnit.Tests
                         if (genderPetNames.ContainsKey(p.Gender))
                         {
                             var l = genderPetNames[p.Gender];
-                            l.Add(pet.Name);                            
+                            l.Add(pet.Name);
                         }
                         else
                         {
@@ -34,8 +34,7 @@ namespace AGL.Test.Solution.XUnit.Tests
                 genderPetNames["Female"].Sort();
 
                 var males = genderPetNames["Male"].ToArray().Select(x => ("Male", x));
-                var females = genderPetNames["Female"].ToArray().Select(x => ("Female", x));
-
+                var females = genderPetNames["Female"].ToArray().Select(x => ("Female", x));                
                 return males.Concat(females).ToArray();
             }
         }

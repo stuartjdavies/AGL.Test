@@ -5,6 +5,7 @@ using Xunit;
 using Fp.Common.Monads.EitherMonad;
 using System;
 using AGL.Test.Solution.Data.PetApi;
+using FluentAssertions;
 
 namespace AGL.Test.Solution.XUnit.Tests
 {    
@@ -106,13 +107,12 @@ namespace AGL.Test.Solution.XUnit.Tests
 
             var r = new PetRespository(() => Task.FromResult(people.Select(x => x)));
 
-            var result = (await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())                                   
-                         .Match(left => throw new Exception($"Error: {left}"),
-                                        right => right.Select(g => g.PetNames.Select(y => (g.Gender, y)))
-                                                  .SelectMany(x => x).ToArray());
-
-            Assert.True(result.SequenceEqual(verificationSet) == true,
-                        "Result doesn't match verification set");
+            (await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())
+            .Match(left => throw new Exception($"Error: {left}"),
+                   right => right.Select(g => g.PetNames.Select(y => (g.Gender, y)))
+            .SelectMany(x => x).ToArray())
+            .Should()
+            .BeEquivalentTo(verificationSet, "Result doesn't match verification set");            
         }
 
         [Fact]
@@ -121,35 +121,30 @@ namespace AGL.Test.Solution.XUnit.Tests
             // 
             // Generate 100 random generated people
             //
-            var people = PersonGenerator.Generate(3, 10).Generate(100);
+            var petOwners = PetOwnerGenerator.Generate(3, 10).Generate(100);
 
-            var r = new PetRespository(() => Task.FromResult(people.Select(x => x)));
+            var r = new PetRespository(() => Task.FromResult(petOwners.Select(x => x)));
           
-            var verificationSet = AlternateTestAlgorithm.GetPetNamesInAlphabeticalOrderGroupedByGender(people);
-            var result = (await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())
-                         .Match(left => throw new Exception($"Error: {left}"),
-                                       right => right.Select(g => g.PetNames.Select(y => (g.Gender, y)))
-                                                     .SelectMany(x => x)
-                                                     .OrderByDescending(x => x.Gender)
-                                                     .ToArray());
+            var verificationSet = AlternateTestAlgorithm.GetPetNamesInAlphabeticalOrderGroupedByGender(petOwners);
 
-            Assert.True(result.SequenceEqual(verificationSet) == true,
-                        "Result doesn't match verification set");
+            (await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())
+            .Match(left => throw new Exception($"Error: {left}"),
+                   right => right.Select(g => g.PetNames.Select(y => (g.Gender, y)))
+                                 .SelectMany(x => x)
+                                 .OrderByDescending(x => x.Gender)
+                                 .ToArray())
+            .Should()
+            .BeEquivalentTo(verificationSet, "Result doesn't match verification set");                                                          
         }
 
         [Fact]
         public async void PetRepository_CheckIfApiFailureAreHandledCorrectly_Test()
-        {
-            // 
-            // Generate 100 random generated people
-            //           
-            var r = new PetRespository(() => throw new Exception("Failed in getting data"));
-
-            var males = await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync();
-                        
-            var errorMsg = males.Match(left => left, right => string.Empty);
-
-            Assert.True(errorMsg.Contains("Failed in getting data"), "Expected to receive error message");
+        {                       
+            (await (new PetRespository(() => throw new Exception("Failed in getting data"))
+            .GetPetNamesInAlphabeticalOrderGroupedByGenderAsync()))                        
+            .Match(left => left, right => string.Empty)
+            .Should()
+            .Contain("Failed in getting data", "Expected to receive error message");
         }
     }
 }
