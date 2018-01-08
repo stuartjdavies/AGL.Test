@@ -12,9 +12,12 @@ namespace AGL.Test.Solution.Console
 
         static Program()
         {
+            var serviceUrl = "https://raw.githubusercontent.com/stuartjdavies/AGL.Test/master/people.json";
+            // var serviceUrl = "http://agl-developer-test.azurewebsites.net/people.json";
+
             container = new Container();
             container.Register<IPetRepository>(() => new PetRespository(() =>
-                    PetWebApiAdaptor.GetPeoples("http://agl-developer-test.azurewebsites.net/")));
+                    PetWebApiAdaptor.GetPeoples(serviceUrl)));
             container.Verify();
         }
 

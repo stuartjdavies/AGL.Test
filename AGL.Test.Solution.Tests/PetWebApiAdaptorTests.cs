@@ -11,8 +11,11 @@ namespace AGL.Test.Solution.Tests
 
         [TestMethod]
         public void PetWebApiGetPeople_BasicIntegrationTest()
-        {
-            var peoples = Task.Run(async () => await PetWebApiAdaptor.GetPeoples("http://agl-developer-test.azurewebsites.net/"))
+        {            
+            var mockServiceUrl = "https://raw.githubusercontent.com/stuartjdavies/AGL.Test/master/people.json";
+            //var mockServiceUrl = "http://agl-developer-test.azurewebsites.net/people.json";
+
+            var peoples = Task.Run(async () => await PetWebApiAdaptor.GetPeoples(mockServiceUrl))
                               .GetAwaiter()
                               .GetResult()
                               .ToArray();
