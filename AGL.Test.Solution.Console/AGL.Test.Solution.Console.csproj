@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector" Version="4.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AGL.Test.Solution.Data.WebApi\AGL.Test.Solution.Data.WebApi.csproj" />
+    <ProjectReference Include="..\AGL.Test.Solution.Domain\AGL.Test.Solution.Domain.csproj" />
+    <ProjectReference Include="..\AGL.Test.Solution.Tests\AGL.Test.Solution.Tests.csproj" />
+    <ProjectReference Include="..\Fp.Common\Fp.Common.csproj" />
+  </ItemGroup>
+
+</Project>
