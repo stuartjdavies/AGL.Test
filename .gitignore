@@ -19,3 +19,7 @@
 /.vs/VSWorkspaceState.json
 *.sqlite
 /.vs/AGL.Test.Solution/v15/.suo
+/AGL.Test.Solution.Data.PetApi/obj
+/AGL.Test.Solution.Data.PetApi/bin/Debug/netstandard2.0
+/AGL.Test.Solution.XUnit.Tests/bin/Debug/netcoreapp2.0
+/AGL.Test.Solution.XUnit.Tests/obj

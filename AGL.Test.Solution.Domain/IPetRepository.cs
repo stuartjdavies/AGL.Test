@@ -11,6 +11,6 @@ namespace AGL.Test.Solution.Domain
     public enum Gender { Male, Female }
     public interface IPetRepository
     {
-        Task<Either<string, IEnumerable<string>>> GetPetNamesByGenderAsync(Gender g);
+        Task<Either<string, List<(string Gender, List<string> PetNames)>>> GetPetNamesInAlphabeticalOrderGroupedByGenderAsync();
     }
 }

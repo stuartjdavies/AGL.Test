@@ -1,4 +1,5 @@
-﻿using AGL.Test.Solution.Domain;
+﻿using AGL.Test.Solution.Data.PetApi;
+using AGL.Test.Solution.Domain;
 using Fp.Common.Monads.EitherMonad;
 using SimpleInjector;
 using System.Text;
@@ -16,8 +17,7 @@ namespace AGL.Test.Solution.Console
             // var serviceUrl = "http://agl-developer-test.azurewebsites.net/people.json";
 
             container = new Container();
-            container.Register<IPetRepository>(() => new PetRespository(() =>
-                    PetWebApiAdaptor.GetPeoples(serviceUrl)));
+            container.Register<IPetRepository>(() => new PetRespository(() => PetServiceHttpAdaptor.GetPetOwners(serviceUrl)));
             container.Verify();
         }
 
@@ -25,30 +25,26 @@ namespace AGL.Test.Solution.Console
         {
             var r = container.GetInstance<IPetRepository>();
 
-            var males = Task.Run(async () => await r.GetPetNamesByGenderAsync(Gender.Male))
-                            .GetAwaiter()
-                            .GetResult();
+            var petNames = Task.Run(async () => await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())
+                               .GetAwaiter()
+                               .GetResult();            
 
-            var females = Task.Run(async () => await r.GetPetNamesByGenderAsync(Gender.Female))
-                              .GetAwaiter()
-                              .GetResult();
+            System.Console.WriteLine(petNames.Match(left => $"Received error {left}",
+                                                    right => {
+                                                        var sb = new StringBuilder();
 
-            System.Console.WriteLine("Male");
+                                                        foreach (var g in right)
+                                                        {
+                                                            sb.AppendLine(g.Gender);
 
-            System.Console.WriteLine(males.Match(left => $"Received error {left}",
-                                                 right => {
-                                                    var sb = new StringBuilder();
-                                                    foreach (var item in right) sb.AppendLine(item);
-                                                    return sb.ToString();
-                                                 }));
+                                                            foreach (var name in g.PetNames)
+                                                            {
+                                                                sb.AppendLine($"\t{name}");
+                                                            }
+                                                        }
 
-            System.Console.WriteLine("\rFemale");
-            System.Console.WriteLine(females.Match(left => $"Received error {left}",
-                                                   right => {
-                                                       var sb = new StringBuilder();
-                                                       foreach (var item in right) sb.AppendLine(item);
-                                                       return sb.ToString();
-                                                   }));
+                                                        return sb.ToString();
+                                                    }));            
             
             System.Console.ReadKey();
         }

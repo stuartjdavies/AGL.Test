@@ -6,11 +6,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace AGL.Test.Solution
+namespace AGL.Test.Solution.Data.PetApi
 {
-    public class PetWebApiAdaptor 
+    public class PetServiceHttpAdaptor 
     {      
-        public static async Task<IEnumerable<Person>> GetPeoples(string url)
+        public static async Task<IEnumerable<Person>> GetPetOwners(string url)
         {
             using (var client = new HttpClient())
             {                

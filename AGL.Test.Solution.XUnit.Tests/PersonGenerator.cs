@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using System;
 
-namespace AGL.Test.Solution.Tests
+namespace AGL.Test.Solution.XUnit.Tests
 {
     public partial class PetRepositoryTests
     {

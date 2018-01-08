@@ -7,12 +7,12 @@
 
   <ItemGroup>
     <PackageReference Include="SimpleInjector" Version="4.0.12" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AGL.Test.Solution.Data.WebApi\AGL.Test.Solution.Data.WebApi.csproj" />
+    <ProjectReference Include="..\AGL.Test.Solution.Data.PetApi\AGL.Test.Solution.Data.PetApi.csproj" />
     <ProjectReference Include="..\AGL.Test.Solution.Domain\AGL.Test.Solution.Domain.csproj" />
-    <ProjectReference Include="..\AGL.Test.Solution.Tests\AGL.Test.Solution.Tests.csproj" />
     <ProjectReference Include="..\Fp.Common\Fp.Common.csproj" />
   </ItemGroup>
 
