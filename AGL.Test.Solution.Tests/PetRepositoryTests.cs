@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Fp.Common.Monads.EitherMonad;
 using Newtonsoft.Json;
+using System;
 
 namespace AGL.Test.Solution.Tests
 {
@@ -151,6 +152,25 @@ namespace AGL.Test.Solution.Tests
             Assert.IsTrue(females.Match(left => throw new System.Exception($"Error: {left}"),
                                         right => right.SequenceEqual(testFemales)),
                                         "Alternative solution doesn't match solution for females");
+        }
+
+        [TestMethod]
+        public void PetRepository_CheckIfApiFailureAreHandledCorrectly_Test()
+        {
+            // 
+            // Generate 100 random generated people
+            //
+            var people = PersonGenerator.Generate(3, 30).Generate(100);
+
+            var r = new PetRespository(() => throw new Exception("Failed in getting data"));
+            
+            var males = Task.Run(async () => await r.GetPetNamesByGenderAsync(Domain.Gender.Male))
+                            .GetAwaiter()
+                            .GetResult();
+
+            var errorMsg = males.Match(left => left, right => string.Empty);
+
+            Assert.IsTrue(errorMsg.Contains("Failed in getting data"), "Expected to receive error message");            
         }
     }
 }
