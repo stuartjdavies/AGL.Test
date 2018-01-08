@@ -18,17 +18,15 @@ namespace AGL.Test.Solution.Data.PetApi
         {
             try
             {
-                var petOwners = (await GetPetOwners());
-
-                var ps = petOwners.GroupBy(p => p.Gender)                                  
-                                  .Select(g => (g.Key, g.Where(x => x.Pets != null)
-                                                        .SelectMany(x => x.Pets)                                                        
-                                                        .Select(x => x.Name)
-                                                        .OrderBy(x => x)
-                                                        .ToList())).ToList();
-                
-            
-                return Either<string, List<(string Gender, List<string> PetNames)>>.ReturnRight(ps);
+                return (await GetPetOwners())
+                       .GroupBy(p => p.Gender)                                  
+                       .Select(g => (g.Key, g.Where(x => x.Pets != null)
+                                             .SelectMany(x => x.Pets)                                                        
+                                             .Select(x => x.Name)
+                                             .OrderBy(x => x)
+                                             .ToList()))
+                       .ToList()
+                       .Pipe(ps => Either<string, List<(string Gender, List<string> PetNames)>>.ReturnRight(ps));
             }
             catch(Exception ex)
             {
