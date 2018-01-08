@@ -4,6 +4,11 @@ using System.Text;
 
 namespace Fp.Common.Monads.EitherMonad
 {
+    // 
+    // Based on Either Monad
+    // See https://www.schoolofhaskell.com/school/starting-with-haskell/basics-of-haskell/10_Error_Handling
+    //
+
     public abstract class Either<TLeft, TRight>
     {
         public static Either<TLeft, TRight> ReturnLeft(TLeft l)

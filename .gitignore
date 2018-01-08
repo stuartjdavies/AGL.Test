@@ -14,3 +14,7 @@
 /Fp.Common/obj
 /packages
 /.vs/AGL.Test.Solution/v15/sqlite3
+/.vs/AGL.Test/v15
+/.vs/ProjectSettings.json
+/.vs/VSWorkspaceState.json
+*.sqlite
