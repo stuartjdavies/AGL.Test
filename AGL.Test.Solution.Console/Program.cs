@@ -2,6 +2,7 @@
 using AGL.Test.Solution.Domain;
 using Fp.Common.Monads.EitherMonad;
 using SimpleInjector;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,24 +28,26 @@ namespace AGL.Test.Solution.Console
 
             var petNames = Task.Run(async () => await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())
                                .GetAwaiter()
-                               .GetResult();            
+                               .GetResult();   
+            
+            string DisplayResult(List<(string Gender, List<string> PetNames)> right)
+            {                
+                var sb = new StringBuilder();
 
-            System.Console.WriteLine(petNames.Match(left => $"Received error {left}",
-                                                    right => {
-                                                        var sb = new StringBuilder();
+                foreach (var g in right)
+                {
+                    sb.AppendLine(g.Gender);
 
-                                                        foreach (var g in right)
-                                                        {
-                                                            sb.AppendLine(g.Gender);
+                    foreach (var name in g.PetNames)
+                    {
+                        sb.AppendLine($"\t{name}");
+                    }
+                }
 
-                                                            foreach (var name in g.PetNames)
-                                                            {
-                                                                sb.AppendLine($"\t{name}");
-                                                            }
-                                                        }
+                return sb.ToString();
+            };
 
-                                                        return sb.ToString();
-                                                    }));            
+            System.Console.WriteLine(petNames.Match(left => $"Received error {left}", DisplayResult));            
             
             System.Console.ReadKey();
         }
