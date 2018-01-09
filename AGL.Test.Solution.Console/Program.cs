@@ -30,7 +30,7 @@ namespace AGL.Test.Solution.Console
                                .GetAwaiter()
                                .GetResult();   
             
-            string DisplayResult(List<(string Gender, List<string> PetNames)> right)
+            string BuildDisplayResultString(List<(string Gender, List<string> PetNames)> right)
             {                
                 var sb = new StringBuilder();
 
@@ -47,7 +47,7 @@ namespace AGL.Test.Solution.Console
                 return sb.ToString();
             };
 
-            System.Console.WriteLine(petNames.Match(left => $"Received error {left}", DisplayResult));            
+            System.Console.WriteLine(petNames.Match(left => $"Received error {left}", BuildDisplayResultString));            
             
             System.Console.ReadKey();
         }
