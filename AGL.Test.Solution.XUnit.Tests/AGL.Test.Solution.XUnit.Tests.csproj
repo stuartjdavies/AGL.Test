@@ -17,6 +17,7 @@
   <ItemGroup>
     <PackageReference Include="Bogus" Version="22.0.2" />
     <PackageReference Include="FluentAssertions" Version="5.0.0-rc0001" />
+    <PackageReference Include="Fp.Common" Version="1.0.0-beta1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02" />
     <PackageReference Include="xunit" Version="2.2.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
@@ -25,7 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AGL.Test.Solution.Data.PetApi\AGL.Test.Solution.Data.PetApi.csproj" />
     <ProjectReference Include="..\AGL.Test.Solution.Domain\AGL.Test.Solution.Domain.csproj" />
-    <ProjectReference Include="..\Fp.Common\Fp.Common.csproj" />
   </ItemGroup>
 
 </Project>

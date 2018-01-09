@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGL.Test.Solution.Domain", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGL.Test.Solution.Console", "AGL.Test.Solution.Console\AGL.Test.Solution.Console.csproj", "{83D22178-AABE-41D3-8FFE-555689A849E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fp.Common", "Fp.Common\Fp.Common.csproj", "{0BD2A9BE-62EE-44ED-8916-DE63B3FFDDD0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AGL.Test.Solution.XUnit.Tests", "AGL.Test.Solution.XUnit.Tests\AGL.Test.Solution.XUnit.Tests.csproj", "{4BF85606-30D4-4DB1-AA68-4BECE5BDDE5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGL.Test.Solution.XUnit.Tests", "AGL.Test.Solution.XUnit.Tests\AGL.Test.Solution.XUnit.Tests.csproj", "{4BF85606-30D4-4DB1-AA68-4BECE5BDDE5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGL.Test.Solution.Data.PetApi", "AGL.Test.Solution.Data.PetApi\AGL.Test.Solution.Data.PetApi.csproj", "{353EAEE2-DE15-4787-8871-6D228CAC7D8D}"
 EndProject
@@ -27,10 +25,6 @@ Global
 		{83D22178-AABE-41D3-8FFE-555689A849E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83D22178-AABE-41D3-8FFE-555689A849E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83D22178-AABE-41D3-8FFE-555689A849E2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BD2A9BE-62EE-44ED-8916-DE63B3FFDDD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BD2A9BE-62EE-44ED-8916-DE63B3FFDDD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BD2A9BE-62EE-44ED-8916-DE63B3FFDDD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BD2A9BE-62EE-44ED-8916-DE63B3FFDDD0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4BF85606-30D4-4DB1-AA68-4BECE5BDDE5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4BF85606-30D4-4DB1-AA68-4BECE5BDDE5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BF85606-30D4-4DB1-AA68-4BECE5BDDE5E}.Release|Any CPU.ActiveCfg = Release|Any CPU

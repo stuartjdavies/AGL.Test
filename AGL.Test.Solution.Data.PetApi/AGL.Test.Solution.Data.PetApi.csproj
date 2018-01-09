@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fp.Common" Version="1.0.0-beta1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1-beta3" />
     <PackageReference Include="System.Net.Http.Formatting.Extension" Version="5.2.3" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
