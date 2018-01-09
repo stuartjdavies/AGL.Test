@@ -1,19 +1,20 @@
-using AGL.Test.Solution.Data.PetApi;
+using AGL.Common;
+using AGL.Test.Solution.Domain;
 using FluentAssertions;
 using System.Linq;
 using Xunit;
 
 namespace AGL.Test.Solution.XUnit.Tests
 {    
-    public class PetApiHttpAdaptorTests
+    public class HttpAdaptorTests
     {
         [Fact]
-        public async void PetWebApiGetPeople_BasicIntegrationTest()
+        public async void HttpAdaptor_BasicIntegrationGetTest()
         {
             var mockServiceUrl = "https://raw.githubusercontent.com/stuartjdavies/AGL.Test/master/people.json";
             ////var mockServiceUrl = "http://agl-developer-test.azurewebsites.net/people.json";
 
-            (await PetServiceHttpAdaptor.GetPetOwners(mockServiceUrl))
+            (await HttpAdaptor.GetAsync<Person[]>(mockServiceUrl))
             .Should()
             .HaveCountGreaterThan(0, "We should receive at least one person")
             .And

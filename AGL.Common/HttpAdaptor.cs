@@ -1,24 +1,22 @@
-﻿using AGL.Test.Solution.Domain;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace AGL.Test.Solution.Data.PetApi
+namespace AGL.Common
 {
-    public class PetServiceHttpAdaptor 
-    {      
-        public static async Task<IEnumerable<Person>> GetPetOwners(string url)
+    public class HttpAdaptor
+    {
+        public static async Task<T> GetAsync<T>(string url)
         {
             using (var client = new HttpClient())
-            {                
+            {
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 var response = await client.GetAsync(url);
-                
+
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception(response.ReasonPhrase);
@@ -26,7 +24,7 @@ namespace AGL.Test.Solution.Data.PetApi
 
                 var v = await response.Content.ReadAsStringAsync();
 
-                return JsonConvert.DeserializeObject<Person[]>(v);
+                return JsonConvert.DeserializeObject<T>(v);
             };
         }
 

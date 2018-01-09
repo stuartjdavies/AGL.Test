@@ -1,4 +1,5 @@
-﻿using AGL.Test.Solution.Data.PetApi;
+﻿using AGL.Common;
+using AGL.Test.Solution.Data.PetApi;
 using AGL.Test.Solution.Domain;
 using Fp.Common.Monads.EitherMonad;
 using SimpleInjector;
@@ -18,7 +19,7 @@ namespace AGL.Test.Solution.Console
             // var serviceUrl = "http://agl-developer-test.azurewebsites.net/people.json";
 
             container = new Container();
-            container.Register<IPetRepository>(() => new PetRespository(() => PetServiceHttpAdaptor.GetPetOwners(serviceUrl)));
+            container.Register<IPetRepository>(() => new PetRespository(async () => await HttpAdaptor.GetAsync<Person[]>(serviceUrl)));            
             container.Verify();
         }
 

@@ -23,3 +23,5 @@
 /AGL.Test.Solution.Data.PetApi/bin/Debug/netstandard2.0
 /AGL.Test.Solution.XUnit.Tests/bin/Debug/netcoreapp2.0
 /AGL.Test.Solution.XUnit.Tests/obj
+/AGL.Common/bin/Debug/netstandard2.0
+/AGL.Common/obj

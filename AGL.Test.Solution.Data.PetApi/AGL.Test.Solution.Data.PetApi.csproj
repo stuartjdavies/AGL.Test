@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AGL.Common\AGL.Common.csproj" />
     <ProjectReference Include="..\AGL.Test.Solution.Domain\AGL.Test.Solution.Domain.csproj" />
   </ItemGroup>
 
