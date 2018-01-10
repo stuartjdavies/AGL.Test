@@ -6,6 +6,7 @@ using Fp.Common.Monads.RopResultMonad;
 using System;
 using AGL.Test.Solution.Data.PetApi;
 using FluentAssertions;
+using AGL.Test.Solution.Domain;
 
 namespace AGL.Test.Solution.XUnit.Tests
 {    
@@ -105,7 +106,7 @@ namespace AGL.Test.Solution.XUnit.Tests
 
             var people = JsonConvert.DeserializeObject<Domain.Person[]>(SampleTestJson);
 
-            var r = new PetRespository(() => Task.FromResult(people.Select(x => x)));
+            var r = new PetRespository(() => Task.FromResult(RopResult<Person[], DomainEvent[]>.ReturnSuccess((people.Select(x => x).ToArray(), new DomainEvent[] { }))));            
 
             (await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())
             .Match(success => success
@@ -126,7 +127,7 @@ namespace AGL.Test.Solution.XUnit.Tests
             //
             var petOwners = PetOwnerGenerator.Generate(3, 10).Generate(100);
 
-            var r = new PetRespository(() => Task.FromResult(petOwners.Select(x => x)));
+            var r = new PetRespository(() => Task.FromResult(RopResult<Person[], DomainEvent[]>.ReturnSuccess((petOwners.Select(x => x).ToArray(), new DomainEvent[] { }))));
 
             var verificationSet = AlternateTestAlgorithm.GetPetNamesInAlphabeticalOrderGroupedByGender(petOwners);
 
@@ -145,12 +146,14 @@ namespace AGL.Test.Solution.XUnit.Tests
         [Fact]
         public async void PetRepository_CheckIfApiFailureAreHandledCorrectly_Test()
         {
-            string s = (await (new PetRespository(() => throw new Exception("Failed in getting data"))
-            .GetPetNamesInAlphabeticalOrderGroupedByGenderAsync()))
-            .Match(success => throw new Exception($"Should receive success message"),
-                   failure => failure[0].Body.ToString());
-                              
-            s.Should().Contain("Failed in getting data");
+            var es = new DomainEvent[] { new DomainEvent("FAILURE", "TEST", EventLevel.Error, "Failed in getting data") };           
+            
+            string errorMsg = (await (new PetRespository(() => Task.FromResult((RopResult<Person[], DomainEvent[]>)RopResult<Person[], DomainEvent[]>.ReturnFailure(es))))
+                              .GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())
+                              .Match(success => throw new Exception($"Should receive success message"),
+                                     failure => failure[0].Body.ToString());
+
+            errorMsg.Should().Contain("Failed in getting data");
         }
     }
 }

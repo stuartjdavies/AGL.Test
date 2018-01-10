@@ -9,4 +9,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1-beta3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AGL.Test.Solution.Domain\AGL.Test.Solution.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

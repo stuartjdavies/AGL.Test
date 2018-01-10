@@ -1,6 +1,7 @@
 using AGL.Common;
 using AGL.Test.Solution.Domain;
 using FluentAssertions;
+using Fp.Common.Monads.RopResultMonad;
 using System.Linq;
 using Xunit;
 
@@ -15,6 +16,8 @@ namespace AGL.Test.Solution.XUnit.Tests
             ////var mockServiceUrl = "http://agl-developer-test.azurewebsites.net/people.json";
 
             (await HttpAdaptor.GetAsync<Person[]>(mockServiceUrl))
+            .Match(success => success.Result,
+                   failure => throw new System.Exception("Should not get here"))
             .Should()
             .HaveCountGreaterThan(0, "We should receive at least one person")
             .And

@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using AGL.Test.Solution.Domain;
+using Fp.Common.Monads.RopResultMonad;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,24 +10,35 @@ namespace AGL.Common
 {
     public class HttpAdaptor
     {
-        public static async Task<T> GetAsync<T>(string url)
+        public static async Task<RopResult<T, DomainEvent[]>> GetAsync<T>(string url)
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var response = await client.GetAsync(url);
-
-                if (!response.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    throw new Exception(response.ReasonPhrase);
-                }
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var v = await response.Content.ReadAsStringAsync();
+                    var response = await client.GetAsync(url);
 
-                return JsonConvert.DeserializeObject<T>(v);
-            };
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception(response.ReasonPhrase);
+                    }
+
+                    var v = await response.Content.ReadAsStringAsync();
+
+                    return RopResult<T, DomainEvent[]>.ReturnSuccess(
+                                (JsonConvert.DeserializeObject<T>(v), 
+                                new[] { new DomainEvent($"HTTP_GET_SUCCESS", "HttpAdaptor", EventLevel.Info, $"GET { url }") }));
+                };
+            }
+            catch(Exception ex)
+            {
+                return RopResult<T, DomainEvent[]>.ReturnFailure(
+                                new[] { new DomainEvent($"HTTP_GET_FAILURE", "HttpAdaptor", EventLevel.Info, $"GET FAILURE with message {ex.Message}") });
+
+            }
         }
 
     }
