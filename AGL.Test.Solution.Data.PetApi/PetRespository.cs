@@ -1,6 +1,6 @@
 ﻿using AGL.Test.Solution.Domain;
 using Fp.Common;
-using Fp.Common.Monads.EitherMonad;
+using Fp.Common.Monads.RopResultMonad;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace AGL.Test.Solution.Data.PetApi
         public PetRespository(Func<Task<IEnumerable<Person>>> getPetOwners)
         => this.GetPetOwners = getPetOwners;
 
-        public async Task<Either<string, List<(string Gender, List<string> PetNames)>>> GetPetNamesInAlphabeticalOrderGroupedByGenderAsync()
+        public async Task<RopResult<List<(string Gender, List<string> PetNames)>, DomainEvent[]>> GetPetNamesInAlphabeticalOrderGroupedByGenderAsync()
         {
             try
             {
@@ -26,11 +26,22 @@ namespace AGL.Test.Solution.Data.PetApi
                                              .OrderBy(x => x)
                                              .ToList()))
                        .ToList()
-                       .Pipe(ps => Either<string, List<(string Gender, List<string> PetNames)>>.ReturnRight(ps));
+                       .Pipe(ps => {
+                            var es = new [] { new DomainEvent("GetPetNamesInAlphabeticalOrderGroupedByGenderAsync",
+                                                              "PetRespository",
+                                                              EventLevel.Info, 
+                                                              null) };
+                            return RopResult<List<(string Gender, List<string> PetNames)>, DomainEvent[]>.ReturnSuccess((ps, es));
+                        });
             }
             catch(Exception ex)
             {
-                return Either<string, List<(string Gender, List<string> PetNames)>>.ReturnLeft(ex.ToString());
+                var es = new DomainEvent[] { new DomainEvent("GetPetNamesInAlphabeticalOrderGroupedByGenderFailure",
+                                                             "PetRespository",
+                                                             EventLevel.Error,
+                                                             ex.Message) };
+
+                return RopResult<List<(string Gender, List<string> PetNames)>, DomainEvent[]>.ReturnFailure(es);
             }
         }
     }

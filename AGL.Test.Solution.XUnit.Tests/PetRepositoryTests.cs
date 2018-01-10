@@ -2,7 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 using Xunit;
-using Fp.Common.Monads.EitherMonad;
+using Fp.Common.Monads.RopResultMonad;
 using System;
 using AGL.Test.Solution.Data.PetApi;
 using FluentAssertions;
@@ -108,9 +108,12 @@ namespace AGL.Test.Solution.XUnit.Tests
             var r = new PetRespository(() => Task.FromResult(people.Select(x => x)));
 
             (await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())
-            .Match(left => throw new Exception($"Error: {left}"),
-                   right => right.Select(g => g.PetNames.Select(y => (g.Gender, y)))
-            .SelectMany(x => x).ToArray())
+            .Match(success => success
+                              .Result
+                              .Select(g => g.PetNames.Select(y => (g.Gender, y)))
+                              .SelectMany(y => y)
+                              .ToArray(),
+                   failure => throw new Exception($"Error: {failure}"))            
             .Should()
             .BeEquivalentTo(verificationSet, "Result doesn't match verification set");            
         }
@@ -124,27 +127,30 @@ namespace AGL.Test.Solution.XUnit.Tests
             var petOwners = PetOwnerGenerator.Generate(3, 10).Generate(100);
 
             var r = new PetRespository(() => Task.FromResult(petOwners.Select(x => x)));
-          
+
             var verificationSet = AlternateTestAlgorithm.GetPetNamesInAlphabeticalOrderGroupedByGender(petOwners);
 
             (await r.GetPetNamesInAlphabeticalOrderGroupedByGenderAsync())
-            .Match(left => throw new Exception($"Error: {left}"),
-                   right => right.Select(g => g.PetNames.Select(y => (g.Gender, y)))
-                                 .SelectMany(x => x)
-                                 .OrderByDescending(x => x.Gender)
-                                 .ToArray())
+            .Match(success => success
+                              .Result
+                              .Select(g => g.PetNames.Select(y => (g.Gender, y)))
+                              .SelectMany(x => x)
+                              .OrderByDescending(x => x.Gender)
+                              .ToArray(),
+                    failure => throw new Exception($"Error: {failure}"))
             .Should()
-            .BeEquivalentTo(verificationSet, "Result doesn't match verification set");                                                          
+            .BeEquivalentTo(verificationSet, "Result doesn't match verification set");
         }
 
         [Fact]
         public async void PetRepository_CheckIfApiFailureAreHandledCorrectly_Test()
-        {                       
-            (await (new PetRespository(() => throw new Exception("Failed in getting data"))
-            .GetPetNamesInAlphabeticalOrderGroupedByGenderAsync()))                        
-            .Match(left => left, right => string.Empty)
-            .Should()
-            .Contain("Failed in getting data", "Expected to receive error message");
+        {
+            string s = (await (new PetRespository(() => throw new Exception("Failed in getting data"))
+            .GetPetNamesInAlphabeticalOrderGroupedByGenderAsync()))
+            .Match(success => throw new Exception($"Should receive success message"),
+                   failure => failure[0].Body.ToString());
+                              
+            s.Should().Contain("Failed in getting data");
         }
     }
 }

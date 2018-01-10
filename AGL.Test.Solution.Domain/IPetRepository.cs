@@ -1,4 +1,4 @@
-﻿using Fp.Common.Monads.EitherMonad;
+﻿using Fp.Common.Monads.RopResultMonad;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,6 +11,6 @@ namespace AGL.Test.Solution.Domain
     public enum Gender { Male, Female }
     public interface IPetRepository
     {
-        Task<Either<string, List<(string Gender, List<string> PetNames)>>> GetPetNamesInAlphabeticalOrderGroupedByGenderAsync();
+        Task<RopResult<List<(string Gender, List<string> PetNames)>, DomainEvent[]>> GetPetNamesInAlphabeticalOrderGroupedByGenderAsync();
     }
 }

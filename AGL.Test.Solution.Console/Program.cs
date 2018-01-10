@@ -1,7 +1,7 @@
 ﻿using AGL.Common;
 using AGL.Test.Solution.Data.PetApi;
 using AGL.Test.Solution.Domain;
-using Fp.Common.Monads.EitherMonad;
+using Fp.Common.Monads.RopResultMonad;
 using SimpleInjector;
 using System.Collections.Generic;
 using System.Text;
@@ -31,11 +31,11 @@ namespace AGL.Test.Solution.Console
                                .GetAwaiter()
                                .GetResult();   
             
-            string BuildDisplayResultString(List<(string Gender, List<string> PetNames)> right)
+            string BuildDisplayResultString((List<(string Gender, List<string> PetNames)> Result, DomainEvent[] Messages) success)
             {                
                 var sb = new StringBuilder();
 
-                foreach (var g in right)
+                foreach (var g in success.Result)
                 {
                     sb.AppendLine(g.Gender);
 
@@ -48,7 +48,21 @@ namespace AGL.Test.Solution.Console
                 return sb.ToString();
             };
 
-            System.Console.WriteLine(petNames.Match(left => $"Received error {left}", BuildDisplayResultString));            
+            string BuildDisplayErrorString(DomainEvent[] es)
+            {
+                var sb = new StringBuilder();
+
+                foreach (var e in es)
+                {
+                    sb.AppendLine($"EventType: {e.EventType}");
+                    sb.AppendLine($"Body: {e.Body}");                    
+                }
+
+                return sb.ToString();
+            }
+
+            System.Console.WriteLine(petNames.Match(BuildDisplayResultString,
+                                                    BuildDisplayErrorString));            
             
             System.Console.ReadKey();
         }
