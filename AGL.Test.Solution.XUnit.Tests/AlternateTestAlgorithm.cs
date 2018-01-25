@@ -30,11 +30,17 @@ namespace AGL.Test.Solution.XUnit.Tests
                     }                        
                 }
 
-                genderPetNames["Male"].Sort();
-                genderPetNames["Female"].Sort();
+                IEnumerable<(string, string)> GetGenderNames(string gender)
+                => (genderPetNames.ContainsKey(gender)) ?
+                   new Func<IEnumerable<(string, string)>>(() =>
+                   {
+                        genderPetNames[gender]?.Sort();
+                        return genderPetNames[gender].ToArray().Select(x => (gender, x));
+                   })() : new(string, string)[] { };
 
-                var males = genderPetNames["Male"].ToArray().Select(x => ("Male", x));
-                var females = genderPetNames["Female"].ToArray().Select(x => ("Female", x));                
+                var males = GetGenderNames("Male");
+                var females = GetGenderNames("Female");
+
                 return males.Concat(females).ToArray();
             }
         }

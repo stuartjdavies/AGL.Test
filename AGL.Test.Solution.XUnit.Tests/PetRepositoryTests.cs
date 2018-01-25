@@ -7,9 +7,11 @@ using System;
 using AGL.Test.Solution.Data.PetApi;
 using FluentAssertions;
 using AGL.Test.Solution.Domain;
+using FsCheck.Xunit;
+using FsCheck;
 
 namespace AGL.Test.Solution.XUnit.Tests
-{    
+{
     public partial class PetRepositoryTests
     {
         #region SampleTestData
@@ -119,13 +121,11 @@ namespace AGL.Test.Solution.XUnit.Tests
             .BeEquivalentTo(verificationSet, "Result doesn't match verification set");            
         }
 
-        [Fact]
-        public async void PetRepository_CheckAgainstAlternateAlgorithm_Test()
-        {
-            // 
-            // Generate 100 random generated people
-            //
-            var petOwners = PetOwnerGenerator.Generate(3, 10).Generate(100);
+        [Property(Arbitrary = new[] { typeof(PetOwnerGeneratorInputData) })]
+        public async void PetRepository_CheckAgainstAlternateAlgorithm_Test((int MaxPets, int MaxPeople) input)
+        {            
+            var petOwners = PetOwnerGenerator.Generate(0, input.MaxPets)
+                                             .Generate(input.MaxPeople);
 
             var r = new PetRespository(() => Task.FromResult(RopResult<Person[], DomainEvent[]>.ReturnSuccess((petOwners.Select(x => x).ToArray(), new DomainEvent[] { }))));
 

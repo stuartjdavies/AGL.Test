@@ -18,6 +18,7 @@
     <PackageReference Include="Bogus" Version="22.0.2" />
     <PackageReference Include="FluentAssertions" Version="5.0.0-rc0001" />
     <PackageReference Include="Fp.Common" Version="1.0.0-beta2" />
+    <PackageReference Include="FsCheck.Xunit" Version="3.0.0-alpha3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02" />
     <PackageReference Include="xunit" Version="2.2.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
