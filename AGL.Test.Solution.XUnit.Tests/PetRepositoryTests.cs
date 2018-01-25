@@ -9,6 +9,7 @@ using FluentAssertions;
 using AGL.Test.Solution.Domain;
 using FsCheck.Xunit;
 using FsCheck;
+using System.Collections.Generic;
 
 namespace AGL.Test.Solution.XUnit.Tests
 {
@@ -121,12 +122,9 @@ namespace AGL.Test.Solution.XUnit.Tests
             .BeEquivalentTo(verificationSet, "Result doesn't match verification set");            
         }
 
-        [Property(Arbitrary = new[] { typeof(PetOwnerGeneratorInputData) })]
-        public async void PetRepository_CheckAgainstAlternateAlgorithm_Test((int MaxPets, int MaxPeople) input)
+        [Property(Arbitrary = new[] { typeof(GeneratePetOwners) })]
+        public async void PetRepository_CheckAgainstAlternateAlgorithm_Test(List<Domain.Person> petOwners)
         {            
-            var petOwners = PetOwnerGenerator.Generate(0, input.MaxPets)
-                                             .Generate(input.MaxPeople);
-
             var r = new PetRespository(() => Task.FromResult(RopResult<Person[], DomainEvent[]>.ReturnSuccess((petOwners.Select(x => x).ToArray(), new DomainEvent[] { }))));
 
             var verificationSet = AlternateTestAlgorithm.GetPetNamesInAlphabeticalOrderGroupedByGender(petOwners);
